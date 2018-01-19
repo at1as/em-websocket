@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module EventMachine
   module WebSocket
     class Connection < EventMachine::Connection
@@ -10,7 +12,7 @@ module EventMachine
       def onclose(&blk);    @onclose = blk;   end
       def onerror(&blk);    @onerror = blk;   end
       def onmessage(&blk);  @onmessage = blk; end
-      def onbinary(&blk);   @onbinary = blk; end
+      def onbinary(&blk);   @onbinary = blk;  end
       def onping(&blk);     @onping = blk;    end
       def onpong(&blk);     @onpong = blk;    end
 

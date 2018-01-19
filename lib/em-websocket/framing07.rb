@@ -1,4 +1,5 @@
 # encoding: BINARY
+# frozen_string_literal: true
 
 module EventMachine
   module WebSocket
@@ -104,13 +105,13 @@ module EventMachine
 
           if !fin
             debug [:moreframe, frame_type, application_data]
-            @application_data_buffer << application_data
+            @application_data_buffer += application_data
             # The message type is passed in the first frame
             @frame_type ||= frame_type
           else
             # Message is complete
             if frame_type == :continuation
-              @application_data_buffer << application_data
+              @application_data_buffer += application_data
               message(@frame_type, '', @application_data_buffer)
               @application_data_buffer = ''
               @frame_type = nil
@@ -132,21 +133,21 @@ module EventMachine
 
         opcode = type_to_opcode(frame_type)
         byte1 = opcode | 0b10000000 # fin bit set, rsv1-3 are 0
-        frame << byte1
+        frame += [byte1].pack('C*').force_encoding(frame.encoding) # JW TODO
 
         length = application_data.size
         if length <= 125
           byte2 = length # since rsv4 is 0
-          frame << byte2
+          frame += [byte2].pack('U')
         elsif length < 65536 # write 2 byte length
-          frame << 126
-          frame << [length].pack('n')
+          frame += [126].pack('U')
+          frame += [length].pack('n')
         else # write 8 byte length
-          frame << 127
-          frame << [length >> 32, length & 0xFFFFFFFF].pack("NN")
+          frame += [127].pack('U')
+          frame += [length >> 32, length & 0xFFFFFFFF].pack("NN")
         end
 
-        frame << application_data
+        frame += application_data.force_encoding(frame.encoding)
 
         @connection.send_data(frame)
       end

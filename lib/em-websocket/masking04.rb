@@ -28,6 +28,8 @@ module EventMachine
         data = ''
         data.force_encoding('ASCII-8BIT') if data.respond_to?(:force_encoding)
         count.times do |i|
+          #data += [getbyte(start_index + i)].pack('C*').force_encoding(data.encoding)
+          #data += getbyte(start_index + i)
           data << getbyte(start_index + i)
         end
         data

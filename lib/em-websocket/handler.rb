@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module EventMachine
   module WebSocket
     class Handler
@@ -43,7 +45,7 @@ module EventMachine
       end
 
       def receive_data(data)
-        @data << data
+        @data << data #].pack('U') # JW TODO: this is a masked string type?
         process_data
       rescue WSProtocolError => e
         fail_websocket(e)

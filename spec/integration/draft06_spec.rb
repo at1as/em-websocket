@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'helper'
 
 describe "draft06" do
@@ -104,7 +105,7 @@ describe "draft06" do
         client.onopen {
           # 1: Send close handshake
           close_data = [4004].pack('n')
-          close_data << "close reason"
+          close_data += "close reason"
           client.send_frame(:close, close_data)
         }
       }

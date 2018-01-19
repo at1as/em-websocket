@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'digest/md5'
 
 module EventMachine::WebSocket
@@ -14,16 +15,16 @@ module EventMachine::WebSocket
         location = "#{scheme}://#{headers['host']}#{path}"
 
         upgrade =  "HTTP/1.1 101 WebSocket Protocol Handshake\r\n"
-        upgrade << "Upgrade: WebSocket\r\n"
-        upgrade << "Connection: Upgrade\r\n"
-        upgrade << "Sec-WebSocket-Location: #{location}\r\n"
-        upgrade << "Sec-WebSocket-Origin: #{headers['origin']}\r\n"
+        upgrade += "Upgrade: WebSocket\r\n"
+        upgrade += "Connection: Upgrade\r\n"
+        upgrade += "Sec-WebSocket-Location: #{location}\r\n"
+        upgrade += "Sec-WebSocket-Origin: #{headers['origin']}\r\n"
         if protocol = headers['sec-websocket-protocol']
           validate_protocol!(protocol)
-          upgrade << "Sec-WebSocket-Protocol: #{protocol}\r\n"
+          upgrade += "Sec-WebSocket-Protocol: #{protocol}\r\n"
         end
-        upgrade << "\r\n"
-        upgrade << challenge_response
+        upgrade += "\r\n"
+        upgrade += challenge_response
 
         return upgrade
       end

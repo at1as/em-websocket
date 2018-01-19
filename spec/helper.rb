@@ -13,6 +13,7 @@ require 'integration/gte_03_examples'
 
 RSpec.configure do |c|
   c.mock_with :rspec
+  c.expect_with(:rspec) { |c| c.syntax = :should }
 end
 
 class FakeWebSocketClient < EM::Connection
